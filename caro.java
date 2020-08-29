@@ -55,10 +55,12 @@ public class caro {
 	 * Kiem tra dieu kien de duy chuyen cua ban co
 	 */
 	public static boolean is_legal_move(int row2, int column2, String n) {
-		if (row2 < row && column2 < column && n.equalsIgnoreCase("X") || n.equalsIgnoreCase("O") ) {
+		if (row2 < row && column2 < column ) {
+				if( n.equalsIgnoreCase("X") || n.equalsIgnoreCase("O") ) {
 					if (a[row2][column2] == "-") {
 							return true;
 					}
+				}
 		}
 		return false;
 	}
@@ -82,6 +84,10 @@ public class caro {
 			System.out.println("\n---------------");
 		}
 	}
+	
+	
+	
+	
 	
 	/*
 	 * chay bang random
@@ -140,79 +146,93 @@ public class caro {
 	
 	
 	public static boolean checkWin(int i, int j)  {
-		int d = 0, k = i ;
-		
-		if(i<row && j < column) {
+		if(i < row && j < column) {
 			// so cot 
-			while (k < row && a[k][j].equalsIgnoreCase(a[i][j]) ) {
-				d++;
-				k++;
+			int check_column = 0, transfer_column = i ;
+			while (transfer_column < column && a[transfer_column][j].equalsIgnoreCase(a[i][j]) ) {
+				check_column++;
+				transfer_column++;
 			}
 			
-			k = i-1;
+			transfer_column = i-1;
 		
-			while( k >= 0 && a[k][j].equalsIgnoreCase(a[i][j]) ) {
-				d++;
-				k--;
+			while(transfer_column >= 0 && a[transfer_column][j].equalsIgnoreCase(a[i][j]) ) {
+				check_column++;
+				transfer_column--;
 			}
 			
-			if(d > 4 ) {
+			if(check_column > 4 ) {
 				return true;
 			}
 			
 			// so hang
-			int d2 = 0, k2 = j;
-			while(k2 < row && a[i][k2].equalsIgnoreCase(a[i][j])) {
-				d2++;
-				k2++;
-			}
-			k2 = j-1;
-			while(k2 >= 0 && a[i][k2].equalsIgnoreCase(a[i][j]) ) {
-				d2++;
-				k2--;
+			int check_row = 0, transfer_row = j;
+			while(transfer_row < row && a[i][transfer_row].equalsIgnoreCase(a[i][j])) {
+				check_row++;
+				transfer_row++;
 			}
 			
-			if(d2 > 4) {
+			transfer_row = j-1;
+			
+			while(transfer_row >= 0 && a[i][transfer_row].equalsIgnoreCase(a[i][j]) ) {
+				check_row++;
+				transfer_row--;
+			}
+			
+			if(check_row > 4) {
 				return true;
 			}
 			
 			
 			// so duong cheo dau huyen
-			int k3 =i , k4 = j, d3 =0;
-			while(k3 < row && k4 < row && a[k3][k4].equalsIgnoreCase(a[i][j]) ) {
-				d3++;
-				k3++;
-				k4++;
+			int transfer_row_1 = i , transfer_column_1 = j, check_ringht_diagonal = 0;
+			while(transfer_row_1 < row && transfer_column_1 < column
+					&& a[transfer_row_1][transfer_column_1].equalsIgnoreCase(a[i][j]) ) {
+				check_ringht_diagonal++;
+				transfer_row_1++;
+				transfer_column_1++;
 			}
 			
-			k3 = i-1;
-			k4 = j-1;
-			while(k3 >= 0 && k4 >= 0 && a[k3][k4].equalsIgnoreCase(a[i][j]) ) {
-				d3++;
-				k3--;
-				k4--;
+			transfer_row_1 = i-1;
+			transfer_column_1 = j-1;
+			
+			while(transfer_row_1 >= 0 && transfer_column_1 >= 0 
+					&& a[transfer_row_1][transfer_column_1].equalsIgnoreCase(a[i][j]) ) {
+				check_ringht_diagonal++;
+				transfer_row_1--;
+				transfer_column_1--;
 			}
 			
-			if(d3 > 4) {
+			if(check_ringht_diagonal > 4) {
 				return true;
 			}
 			
 			// dương chéo dau sat
-			int k5 = i, k6 = j, d4 = 0;
-			while(k5 >= 0 && k6 >= 0 && k5 < row && k6 < row && a[k5][k6].equalsIgnoreCase(a[i][j]) ) {
-				d4++;
-				k5++;
+			//transfer_row_2 >= 0 &&
+			int transfer_row_2 = i, transfer_column_2 = j, check_left_diagonal = 0;
+			while(transfer_column_2 >= 0 && transfer_row_2 < row 
+					&& transfer_column < column 
+					&& a[transfer_row_2][transfer_column_2].equalsIgnoreCase(a[i][j]) ) {
 				
-				k6--;
+				check_left_diagonal++;
+				transfer_row_2++;				
+				transfer_column_2--;
+				
 			}
-			k5 = i-1;
-			k6 = j+1; 
-			while(k5 < row && k6 < row && k5 >= 0 && k6 >= 0 && a[k5][k6].equalsIgnoreCase(a[i][j])) {
-				d4++;
-				k5--;
-				k6++;
+			
+			transfer_row_2 = i-1;
+			transfer_column_2 = j+1; 
+			
+			while(transfer_row_2 < row && transfer_column_2 < column
+					&& transfer_row_2 >= 0 
+					&& a[transfer_row_2][transfer_column_2].equalsIgnoreCase(a[i][j])) {
+				
+				check_left_diagonal++;
+				transfer_row_2--;
+				transfer_column_2++;
+				
 			}
-			if(d4 > 4) {
+			if(check_left_diagonal > 4) {
 				return true;
 			}
 		}	
@@ -247,8 +267,6 @@ public class caro {
 						break;
 			
 						case 2:
-							create_board();
-							output();
 							System.out.println("\n---------------");
 							System.out.print("\nNhap so hang :");
 							int sh = sc.nextInt();
